@@ -21,7 +21,7 @@ class LoginUI(tk.Frame):
                   command=lambda: self.login(controller)).pack(pady=10)
 
     def login(self, controller):
-        username = self.username_entry.get()
+        username = self.username_entry.get()  
         password = self.password_entry.get()
 
         if not username or not password:

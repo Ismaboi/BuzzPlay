@@ -1,36 +1,41 @@
 import tkinter as tk
 from gui.login_ui import LoginUI
 from gui.home_ui import HomeUI
+from gui.register_ui import RegisterUI  # Import Register UI
 from backend.database import initialize_database
 
 # Initialize the database
 initialize_database()
 
 # Root window setup
-root = tk.Tk()
-root.title("BuzzPlay")
-root.geometry("800x600")
-root.resizable(False, False)
-root.iconbitmap(r"assets/images/buzzplay_icon.ico")  # App icon
+class BuzzPlayApp(tk.Tk):
+    def __init__(self):
+        tk.Tk.__init__(self)
+        self.title("BuzzPlay")
+        self.geometry("800x600")
+        self.resizable(False, False)
+        self.iconbitmap(r"assets/images/buzzplay_icon.ico")  # App icon
 
-# Set up the container for all frames
-container = tk.Frame(root)
-container.pack(fill="both", expand=True)
+        # Set up container for frames
+        container = tk.Frame(self)
+        container.pack(fill="both", expand=True)
+        container.grid_rowconfigure(0, weight=1)
+        container.grid_columnconfigure(0, weight=1)
 
-# Configure rows and columns to stack frames
-container.grid_rowconfigure(0, weight=1)
-container.grid_columnconfigure(0, weight=1)
+        self.frames = {}  # Store frames
 
-# Initialize frames
-login_frame = LoginUI(container, root)  # Login screen
-home_frame = HomeUI(container, root)    # Home screen
+        for F in (LoginUI, RegisterUI, HomeUI):
+            page_name = F.__name__.replace("UI", "").lower()
+            frame = F(container, self)
+            self.frames[page_name] = frame
+            frame.grid(row=0, column=0, sticky="nsew")
 
-# Add frames to the container
-login_frame.grid(row=0, column=0, sticky="nsew")
-home_frame.grid(row=0, column=0, sticky="nsew")
+        self.show_frame("login")
 
-# Show the login screen by default
-login_frame.tkraise()
+    def show_frame(self, page_name):
+        frame = self.frames[page_name]
+        frame.tkraise()
 
-# Start the main loop
-root.mainloop()
+if __name__ == "__main__":
+    app = BuzzPlayApp()
+    app.mainloop()

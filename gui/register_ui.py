@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 from backend.database import save_user
 
+
 class RegisterUI(tk.Frame):
     def __init__(self, parent, controller):
         super().__init__(parent)

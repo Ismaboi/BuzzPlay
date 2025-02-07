@@ -3,7 +3,6 @@ from tkinter import messagebox
 from gui.login_ui import LoginUI
 from gui.register_ui import RegisterUI
 from gui.home_ui import HomeUI
-from gui.chat_ui import ChatUI
 from backend.database import initialize_database
 
 
@@ -12,17 +11,21 @@ class BuzzPlayApp(tk.Tk):
         super().__init__()
 
         self.title("BuzzPlay")
-        self.geometry("500x500")
+        self.geometry("1920x1080")
         self.frames = {}  # Dictionary to store frames
         self.container = tk.Frame(self)
         self.container.pack(fill="both", expand=True)
 
-        self.iconbitmap("assets/images/buzzplay_icon.ico")  
+        self.iconbitmap("assets/images/buzzplay_icon.ico")
 
         # Initialize Database
         initialize_database()
 
-        # Add all frames
+        # 🟢 Configure grid to allow resizing and stretching of frames
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure(0, weight=1)
+
+        # Add all frames to the container and set to expand
         for F in (LoginUI, RegisterUI, HomeUI):
             frame = F(parent=self.container, controller=self)
             self.frames[F.__name__] = frame

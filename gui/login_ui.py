@@ -4,32 +4,50 @@ from backend.database import get_user
 
 class LoginUI(tk.Frame):
     def __init__(self, parent, controller):
-        super().__init__(parent)
+        super().__init__(parent, bg="#f0f0f0")
         self.controller = controller
-        self.configure(bg="#f0f0f0")
 
-        tk.Label(self, text="BuzzPlay Login", font=("Arial", 24), bg="#f0f0f0").pack(pady=30)
+        # 🟢 Configure the grid of the parent container to stretch
+        self.grid(row=0, column=0, sticky="nsew")
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=1)
 
-        tk.Label(self, text="Username:", font=("Arial", 14), bg="#f0f0f0").pack(pady=5)
-        self.username_entry = tk.Entry(self, font=("Arial", 14))
+        # 🟢 Main Frame (Perfectly Centered)
+        self.center_frame = tk.Frame(self, bg="#ffffff", bd=2, relief="solid", padx=20, pady=20)
+        self.center_frame.grid(row=0, column=0, sticky="nsew")  # Make it stretch in both directions
+
+        # 🟢 Title
+        tk.Label(self.center_frame, text="BuzzPlay Login", font=("Arial", 20, "bold"), bg="#ffffff").pack(pady=10)
+
+        # 🟢 Username
+        tk.Label(self.center_frame, text="Username:", font=("Arial", 14), bg="#ffffff").pack(anchor="w")
+        self.username_entry = tk.Entry(self.center_frame, font=("Arial", 14), width=30)
         self.username_entry.pack(pady=5)
 
-        tk.Label(self, text="Password:", font=("Arial", 14), bg="#f0f0f0").pack(pady=5)
-        self.password_entry = tk.Entry(self, font=("Arial", 14), show="*")
+        # 🟢 Password
+        tk.Label(self.center_frame, text="Password:", font=("Arial", 14), bg="#ffffff").pack(anchor="w")
+        self.password_entry = tk.Entry(self.center_frame, font=("Arial", 14), width=30, show="*")
         self.password_entry.pack(pady=5)
 
-        tk.Button(self, text="Login", font=("Arial", 14), bg="#4caf50", fg="white", command=self.login).pack(pady=10)
-        tk.Button(self, text="Register", font=("Arial", 14), bg="#2196f3", fg="white", command=self.show_register).pack(pady=10)  # NEW BUTTON
+        # 🟢 Login Button
+        tk.Button(self.center_frame, text="Login", font=("Arial", 14), bg="#4CAF50", fg="white",
+                  command=self.login, width=25).pack(pady=10)
+
+        # 🟢 Register Button
+        tk.Button(self.center_frame, text="Register", font=("Arial", 14), bg="#2196F3", fg="white",
+                  command=self.show_register, width=25).pack(pady=5)
 
     def login(self):
-        username = self.username_entry.get()
-        password = self.password_entry.get()
+        """Handle user login."""
+        username = self.username_entry.get().strip()
+        password = self.password_entry.get().strip()
         user = get_user(username)
-        
-        if user and user[2] == password:  # user[2] is the password column in the database
-            self.controller.show_frame("HomeUI")  # Navigate to home screen
+
+        if user and user[2] == password:  # user[2] is the password from the DB
+            self.controller.show_frame("HomeUI")  # Navigate to Home
         else:
             messagebox.showerror("Login Failed", "Invalid username or password!")
 
     def show_register(self):
-        self.controller.show_frame("RegisterUI")  # Navigate to registration screen
+        """Navigate to the Register screen."""
+        self.controller.show_frame("RegisterUI")

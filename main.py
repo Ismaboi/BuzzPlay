@@ -1,42 +1,32 @@
-import sys
-import tkinter as tk
-from tkinter import ttk
-from gui.login_ui import LoginUI
-from gui.register_ui import RegisterUI
-from gui.home_ui import HomeUI
+import customtkinter
 
-class MainApp(tk.Tk):
+class MainApp(customtkinter.CTk):
     def __init__(self):
         super().__init__()
-        
+
         self.title("BuzzPlay")
-        self.state("zoomed")  # Make the window fullscreen
-        
-        self.container = ttk.Frame(self)
-        self.container.pack(fill="both", expand=True)
-        
-        self.frames = {}
-        for F in (LoginUI, RegisterUI, HomeUI):
-            page_name = F.__name__
-            frame = F(parent=self.container, controller=self)
-            self.frames[page_name] = frame
-            frame.grid(row=0, column=0, sticky="nsew")
-        
-        self.show_frame("LoginUI")
+        self.geometry("800x600")  # You can change this to fit your needs
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure((0, 1, 2), weight=1)
 
-    def show_frame(self, page_name):
-        frame = self.frames[page_name]
-        frame.tkraise()
+        # Title Label
+        self.title_label = customtkinter.CTkLabel(self, text="BuzzPlay", font=("Arial", 30, "bold"))
+        self.title_label.grid(row=0, column=0, pady=20, sticky="n")
 
-    def go_to_register(self):
-        self.show_frame("RegisterUI")
-    
-    def go_to_login(self):
-        self.show_frame("LoginUI")
-    
-    def go_to_home(self, username):
-        self.frames["HomeUI"].set_user(username)
-        self.show_frame("HomeUI")
+        # Login Button
+        self.login_button = customtkinter.CTkButton(self, text="Login", command=self.open_login, width=200, height=50)
+        self.login_button.grid(row=1, column=0, pady=10, padx=20)
+
+        # Register Button
+        self.register_button = customtkinter.CTkButton(self, text="Register", command=self.open_register, width=200, height=50)
+        self.register_button.grid(row=2, column=0, pady=10, padx=20)
+
+    def open_login(self):
+        print("Opening Login Page...")
+        
+
+    def open_register(self):
+        print("Opening Register Page...")
 
 if __name__ == "__main__":
     app = MainApp()
